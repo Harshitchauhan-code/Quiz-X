@@ -8,7 +8,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
-import { Quiz as QuizIcon, EmojiEvents as TrophyIcon } from '@mui/icons-material';
+import { School as SchoolIcon, EmojiEvents as TrophyIcon } from '@mui/icons-material';
 
 
 
@@ -44,7 +44,7 @@ const AppHeader = ({ isAdmin }) => {
                 boxShadow: '0 0 15px rgba(255, 255, 255, 0.3)',
               }}
             >
-              <QuizIcon sx={{ fontSize: 32, color: '#fff' }} />
+              <SchoolIcon sx={{ fontSize: 32, color: '#fff' }} />
             </Box>
             <Box>
               <Typography 

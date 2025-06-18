@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Container, Typography, Button } from '@mui/material';
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
@@ -8,7 +8,28 @@ import AppHeader from '../components/AppHeader';
 const Results = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { score, totalQuestions, isAdmin } = location.state || { score: 0, totalQuestions: 0, isAdmin: false };
+  const [results, setResults] = useState({
+    score: 0,
+    totalQuestions: 0,
+    isAdmin: false
+  });
+
+  useEffect(() => {
+    // Get results from sessionStorage
+    const storedResults = sessionStorage.getItem('quizResults');
+    if (storedResults) {
+      const parsedResults = JSON.parse(storedResults);
+      setResults({
+        score: parsedResults.score,
+        totalQuestions: parsedResults.totalQuestions,
+        isAdmin: parsedResults.isAdmin || false
+      });
+    } else {
+      // Fallback to location state if available
+      const stateData = location.state || { score: 0, totalQuestions: 0, isAdmin: false };
+      setResults(stateData);
+    }
+  }, [location.state]);
 
   const handleRetry = () => {
     navigate('/');
@@ -20,7 +41,7 @@ const Results = () => {
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }}>
-      <AppHeader isAdmin={isAdmin} />
+      <AppHeader isAdmin={results.isAdmin} />
       
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Button
@@ -49,8 +70,8 @@ const Results = () => {
         </Typography>
         
         <QuizResults 
-          score={score} 
-          totalQuestions={totalQuestions} 
+          score={results.score} 
+          totalQuestions={results.totalQuestions} 
           onRetry={handleRetry} 
         />
       </Container>

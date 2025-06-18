@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, CircularProgress, Typography, keyframes } from "@mui/material";
 
-// Pulse animation
+
 const pulse = keyframes`
   0% {
     opacity: 0.6;

@@ -13,8 +13,7 @@ import {
 import { 
   CheckCircle as CheckIcon, 
   Cancel as CancelIcon,
-  Settings as SettingsIcon,
-  QuestionMark as QuestionIcon,
+  Power as PowerIcon
 } from '@mui/icons-material';
 
 const QuestionCard = ({
@@ -82,12 +81,14 @@ const QuestionCard = ({
     <Paper 
       elevation={2}
       sx={{
-        p: 4,
+        p: { xs: 2, sm: 4 },  
         borderRadius: 3,
         border: '1px solid',
         borderColor: 'divider',
         position: 'relative',
         overflow: 'hidden',
+        width: '100%',  
+        maxWidth: '100%', 
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -103,14 +104,19 @@ const QuestionCard = ({
     >
       {/* Question Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, flex: 1 }}>
-          <QuestionIcon sx={{ color: 'primary.main', mt: 0.5, fontSize: 24 }} />
+        <Box sx={{ flex: 1 }}>
           <Typography 
             variant="h5" 
             sx={{ 
               fontWeight: 600,
               color: 'text.primary',
               lineHeight: 1.4,
+              fontSize: { xs: '1.1rem', sm: '1.5rem' },  
+              background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              wordBreak: 'break-word', 
             }}
           >
             {question.question}
@@ -136,7 +142,7 @@ const QuestionCard = ({
                   },
                 }}
               >
-                <SettingsIcon />
+                <PowerIcon />
               </IconButton>
             </Tooltip>
           </Box>
@@ -173,6 +179,8 @@ const QuestionCard = ({
                     sx={{ 
                       fontWeight: selectedAnswer === option ? 600 : 400,
                       flex: 1,
+                      fontSize: { xs: '0.9rem', sm: '1rem' },  
+                      wordBreak: 'break-word',  
                     }}
                   >
                     {option}

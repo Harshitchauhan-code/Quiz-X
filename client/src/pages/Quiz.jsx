@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuiz } from '../context/QuizContext';
 import QuizHeader from '../components/quiz/QuizHeader';
@@ -8,6 +8,7 @@ import QuizNavigation from '../components/quiz/QuizNavigation';
 
 const Quiz = () => {
   const navigate = useNavigate();
+  const [elapsedTime, setElapsedTime] = useState(0);
   const { 
     quizQuestions, 
     currentQuizQuestion, 
@@ -16,13 +17,28 @@ const Quiz = () => {
     selectAnswer, 
     nextQuestion, 
     prevQuestion, 
-    submitQuiz 
+    submitQuiz,
+    allQuestionsAnswered,
+    startTime
   } = useQuiz();
   
   // Start a new quiz when the component mounts
   useEffect(() => {
     startQuiz();
   }, []);
+  
+  // Update the timer every second
+  useEffect(() => {
+    if (startTime) {
+      const timerInterval = setInterval(() => {
+        const currentTime = Date.now();
+        const timeElapsed = Math.floor((currentTime - startTime) / 1000);
+        setElapsedTime(timeElapsed);
+      }, 1000);
+      
+      return () => clearInterval(timerInterval);
+    }
+  }, [startTime]);
   
   // Navigate to results page after submitting
   const handleSubmit = () => {
@@ -51,7 +67,8 @@ const Quiz = () => {
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <QuizHeader 
           currentQuizQuestion={currentQuizQuestion} 
-          totalQuestions={quizQuestions.length} 
+          totalQuestions={quizQuestions.length}
+          elapsedTime={elapsedTime}
         />
         
         <div className="p-6">
@@ -70,6 +87,7 @@ const Quiz = () => {
           onPrevious={prevQuestion}
           onNext={nextQuestion}
           onSubmit={handleSubmit}
+          allQuestionsAnswered={allQuestionsAnswered}
         />
       </div>
     </div>

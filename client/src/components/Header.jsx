@@ -1,8 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useQuiz } from '../context/QuizContext';
 
 const Header = () => {
   const location = useLocation();
+  const { resetQuiz } = useQuiz();
+  
+  // Hide Home link on home page and quiz page
+  const shouldShowHomeLink = location.pathname !== '/' && location.pathname !== '/quiz';
   
   return (
     <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-md">
@@ -14,14 +19,17 @@ const Header = () => {
         
         <nav className="w-full md:w-auto">
           <ul className="flex justify-center md:justify-end space-x-6">
-            <li>
-              <Link 
-                to="/" 
-                className={`text-lg hover:text-blue-200 transition-colors duration-200 ${location.pathname === '/' ? 'font-bold border-b-2 border-white pb-1' : ''}`}
-              >
-                Home
-              </Link>
-            </li>
+            {shouldShowHomeLink && (
+              <li>
+                <Link 
+                  to="/" 
+                  className={`text-lg hover:text-blue-200 transition-colors duration-200 ${location.pathname === '/' ? 'font-bold border-b-2 border-white pb-1' : ''}`}
+                  onClick={resetQuiz}
+                >
+                  Home
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </div>

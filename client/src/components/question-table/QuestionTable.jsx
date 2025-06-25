@@ -5,6 +5,7 @@ import QuestionTableRow from './QuestionTableRow';
 import EditQuestionForm from './EditQuestionForm';
 import Pagination from './Pagination';
 import EmptyState from './EmptyState';
+import StatusFilter from './StatusFilter';
 
 const QuestionTable = ({ setIsEditing }) => {
   const { questions, editQuestion, deleteQuestion, toggleQuestionStatus } = useQuiz();
@@ -15,13 +16,19 @@ const QuestionTable = ({ setIsEditing }) => {
     correctAnswer: '',
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedStatus, setSelectedStatus] = useState('all');
   const questionsPerPage = 5;
   
+  // Filter questions by status
+  const filteredQuestions = selectedStatus === 'all' 
+    ? questions 
+    : questions.filter(question => question.status === selectedStatus);
+    
   // Calculate pagination
   const indexOfLastQuestion = currentPage * questionsPerPage;
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
-  const currentQuestions = questions.slice(indexOfFirstQuestion, indexOfLastQuestion);
-  const totalPages = Math.ceil(questions.length / questionsPerPage);
+  const currentQuestions = filteredQuestions.slice(indexOfFirstQuestion, indexOfLastQuestion);
+  const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
   
   useEffect(() => {
     // Notify parent component about editing state
@@ -99,8 +106,21 @@ const QuestionTable = ({ setIsEditing }) => {
     setCurrentPage(pageNumber);
   };
   
-  if (questions.length === 0) {
-    return <EmptyState />;
+  const handleStatusChange = (status) => {
+    setSelectedStatus(status);
+    setCurrentPage(1); // Reset to first page when filter changes
+  };
+  
+  // Show empty state if there are no questions or no questions match the filter
+  if (questions.length === 0 || filteredQuestions.length === 0) {
+    return (
+      <EmptyState 
+        hasQuestions={questions.length > 0} 
+        filteredStatus={selectedStatus} 
+        selectedStatus={selectedStatus}
+        onStatusChange={handleStatusChange}
+      />
+    );
   }
   
   return (
@@ -115,6 +135,13 @@ const QuestionTable = ({ setIsEditing }) => {
           onCancel={handleCancel}
         />
       )}
+      
+      <div className="p-4 border-b border-gray-200">
+        <StatusFilter 
+          selectedStatus={selectedStatus} 
+          onStatusChange={handleStatusChange} 
+        />
+      </div>
       
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">

@@ -16,7 +16,8 @@ const Result = () => {
     showCorrectQuestions, 
     showIncorrectQuestions,
     toggleCorrectQuestions,
-    toggleIncorrectQuestions
+    toggleIncorrectQuestions,
+    quizResults
   } = useQuiz();
   
   // Calculate results
@@ -58,6 +59,7 @@ const Result = () => {
           totalQuestions={totalQuestions}
           correctCount={correctAnswers}
           incorrectCount={incorrectAnswers}
+          timeTaken={quizResults.timeTaken}
         />
       </div>
       

@@ -46,11 +46,17 @@ export const QuizProvider = ({ children }) => {
     return savedResults ? JSON.parse(savedResults) : {
       score: 0,
       correctAnswers: [],
-      incorrectAnswers: []
+      incorrectAnswers: [],
+      timeTaken: 0
     };
   });
   const [showCorrectQuestions, setShowCorrectQuestions] = useState(false);
   const [showIncorrectQuestions, setShowIncorrectQuestions] = useState(false);
+  const [startTime, setStartTime] = useState(() => {
+    const savedStartTime = localStorage.getItem('quiz-x-startTime');
+    return savedStartTime ? parseInt(savedStartTime) : null;
+  });
+  const [allQuestionsAnswered, setAllQuestionsAnswered] = useState(false);
   
   // Save data to localStorage whenever it changes
   useEffect(() => {
@@ -71,11 +77,23 @@ export const QuizProvider = ({ children }) => {
   
   useEffect(() => {
     localStorage.setItem('quiz-x-userAnswers', JSON.stringify(userAnswers));
-  }, [userAnswers]);
+    
+    // Check if all questions have been answered
+    if (userAnswers.length > 0 && quizQuestions.length > 0) {
+      const allAnswered = userAnswers.every(answer => answer !== '');
+      setAllQuestionsAnswered(allAnswered);
+    }
+  }, [userAnswers, quizQuestions]);
   
   useEffect(() => {
     localStorage.setItem('quiz-x-quizResults', JSON.stringify(quizResults));
   }, [quizResults]);
+  
+  useEffect(() => {
+    if (startTime) {
+      localStorage.setItem('quiz-x-startTime', startTime.toString());
+    }
+  }, [startTime]);
   
   // Toggle question status (Active/Inactive)
   const toggleQuestionStatus = (id) => {
@@ -125,21 +143,39 @@ export const QuizProvider = ({ children }) => {
   
   // Start a new quiz with random questions
   const startQuiz = () => {
-    // Filter active questions
-    const activeQuestions = questions.filter(q => q.status === 'Active');
+    // Check if we already have quiz questions in localStorage
+    const savedQuizQuestions = localStorage.getItem('quiz-x-quizQuestions');
     
-    // Shuffle and get 10 random questions
-    const shuffled = [...activeQuestions].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 10);
-    
-    setQuizQuestions(selected);
-    setCurrentQuizQuestion(0);
-    setUserAnswers(Array(selected.length).fill(''));
-    setQuizResults({
-      score: 0,
-      correctAnswers: [],
-      incorrectAnswers: []
-    });
+    if (savedQuizQuestions && JSON.parse(savedQuizQuestions).length > 0) {
+      // If we have saved questions, use them instead of generating new ones
+      const parsedQuizQuestions = JSON.parse(savedQuizQuestions);
+      setQuizQuestions(parsedQuizQuestions);
+      
+      // If we don't have a start time yet, set it now
+      if (!startTime) {
+        setStartTime(Date.now());
+      }
+    } else {
+      // Filter active questions
+      const activeQuestions = questions.filter(q => q.status === 'Active');
+      
+      // Shuffle and get 10 random questions
+      const shuffled = [...activeQuestions].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 10);
+      
+      setQuizQuestions(selected);
+      setCurrentQuizQuestion(0);
+      setUserAnswers(Array(selected.length).fill(''));
+      setQuizResults({
+        score: 0,
+        correctAnswers: [],
+        incorrectAnswers: [],
+        timeTaken: 0
+      });
+      
+      // Start the timer
+      setStartTime(Date.now());
+    }
   };
   
   // Handle user answer selection
@@ -178,11 +214,21 @@ export const QuizProvider = ({ children }) => {
     
     const score = (correctAnswers.length / quizQuestions.length) * 100;
     
+    // Calculate time taken in seconds
+    const endTime = Date.now();
+    const timeTakenMs = endTime - startTime;
+    const timeTakenSeconds = Math.floor(timeTakenMs / 1000);
+    
     setQuizResults({
       score,
       correctAnswers,
-      incorrectAnswers
+      incorrectAnswers,
+      timeTaken: timeTakenSeconds
     });
+    
+    // Reset the timer
+    localStorage.removeItem('quiz-x-startTime');
+    setStartTime(null);
   };
   
   // Toggle display of correct questions
@@ -205,16 +251,20 @@ export const QuizProvider = ({ children }) => {
     setQuizResults({
       score: 0,
       correctAnswers: [],
-      incorrectAnswers: []
+      incorrectAnswers: [],
+      timeTaken: 0
     });
     setShowCorrectQuestions(false);
     setShowIncorrectQuestions(false);
+    setStartTime(null);
+    setAllQuestionsAnswered(false);
     
-    // Clear quiz-related localStorage items
+    // Clear localStorage items related to quiz
     localStorage.removeItem('quiz-x-quizQuestions');
     localStorage.removeItem('quiz-x-currentQuizQuestion');
     localStorage.removeItem('quiz-x-userAnswers');
     localStorage.removeItem('quiz-x-quizResults');
+    localStorage.removeItem('quiz-x-startTime');
   };
   
   // Value to be provided by the context
@@ -248,7 +298,9 @@ export const QuizProvider = ({ children }) => {
     submitQuiz,
     resetQuiz,
     toggleCorrectQuestions,
-    toggleIncorrectQuestions
+    toggleIncorrectQuestions,
+    allQuestionsAnswered,
+    startTime
   };
   
   return (

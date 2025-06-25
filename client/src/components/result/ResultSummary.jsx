@@ -1,7 +1,14 @@
 import React from 'react';
 
-const ResultSummary = ({ score, totalQuestions, correctCount, incorrectCount }) => {
+const ResultSummary = ({ score, totalQuestions, correctCount, incorrectCount, timeTaken }) => {
   const scorePercentage = Math.round((score / totalQuestions) * 100);
+  
+  // Format the time taken into minutes and seconds
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes} min ${remainingSeconds} sec`;
+  };
   
   return (
     <div className="p-6">
@@ -31,6 +38,15 @@ const ResultSummary = ({ score, totalQuestions, correctCount, incorrectCount }) 
           </div>
         </div>
       </div>
+      
+      {timeTaken > 0 && (
+        <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">Time Taken</h3>
+          <div className="flex items-center">
+            <span className="text-2xl font-bold text-purple-600">{formatTime(timeTaken)}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

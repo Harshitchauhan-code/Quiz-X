@@ -1,8 +1,13 @@
 import React from 'react';
 
-const QuizQuestion = ({ question }) => {
+const QuizQuestion = ({ question, questionNumber }) => {
   return (
-    <h3 className="text-xl font-semibold text-gray-800 mb-6">{question}</h3>
+    <div>
+      <h3 className="text-xl font-semibold text-gray-800 mb-6">
+        <span className="mr-2">{questionNumber}.</span>
+        {question}
+      </h3>
+    </div>
   );
 };
 

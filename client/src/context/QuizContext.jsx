@@ -106,10 +106,14 @@ export const QuizProvider = ({ children }) => {
     );
   };
   
-  // Delete a question
+  // Soft delete a question (toggle deleted status)
   const deleteQuestion = (id) => {
     setQuestions(prevQuestions => 
-      prevQuestions.filter(question => question._id !== id)
+      prevQuestions.map(question => 
+        question._id === id 
+          ? { ...question, status: question.status === 'Deleted' ? 'Active' : 'Deleted' } 
+          : question
+      )
     );
   };
   

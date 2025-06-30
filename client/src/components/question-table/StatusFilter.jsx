@@ -12,6 +12,7 @@ const StatusFilter = ({ selectedStatus, onStatusChange }) => {
         <option value="all">All</option>
         <option value="Active">Active</option>
         <option value="Inactive">Inactive</option>
+        <option value="Deleted">Deleted</option>
       </select>
     </div>
   );

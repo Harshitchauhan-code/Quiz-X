@@ -33,7 +33,8 @@ const QuestionTableRow = ({
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <ActionButtons 
           onEdit={() => onEdit(question)} 
-          onDelete={() => onDelete(question._id)} 
+          onDelete={() => onDelete(question._id)}
+          isDeleted={question.status === 'Deleted'}
         />
       </td>
     </tr>

@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const QuizHeader = ({ currentQuizQuestion, totalQuestions, elapsedTime }) => {
+  const navigate = useNavigate();
   // Format the elapsed time into minutes and seconds
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -18,8 +20,20 @@ const QuizHeader = ({ currentQuizQuestion, totalQuestions, elapsedTime }) => {
           </div>
         )}
       </div>
-      <div className="text-sm font-medium bg-blue-700 px-3 py-1 rounded-full">
-        Question {currentQuizQuestion + 1} of {totalQuestions}
+      <div className="flex items-center">
+        <div className="text-sm font-medium bg-blue-700 px-3 py-1 rounded-full mr-3">
+          Question {currentQuizQuestion + 1} of {totalQuestions}
+        </div>
+        <button 
+          className="text-sm font-medium bg-red-600 hover:bg-red-700 px-3 py-1 rounded-full transition-colors duration-150"
+          onClick={() => {
+            if (window.confirm('Are you sure you want to exit the quiz? Your progress will be lost.')) {
+              navigate('/');
+            }
+          }}
+        >
+          Exit Quiz
+        </button>
       </div>
     </div>
   );

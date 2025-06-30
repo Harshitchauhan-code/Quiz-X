@@ -42,6 +42,11 @@ const Quiz = () => {
   
   // Navigate to results page after submitting
   const handleSubmit = () => {
+    if (!allQuestionsAnswered) {
+      // Show popup alert if not all questions are answered
+      alert('Please attempt all questions before submitting the quiz!');
+      return;
+    }
     submitQuiz();
     navigate('/result');
   };
@@ -72,7 +77,10 @@ const Quiz = () => {
         />
         
         <div className="p-6">
-          <QuizQuestion question={currentQuestion.question} />
+          <QuizQuestion 
+            question={currentQuestion.question} 
+            questionNumber={currentQuizQuestion + 1} 
+          />
           
           <QuizOptions 
             options={currentQuestion.options} 
@@ -81,14 +89,16 @@ const Quiz = () => {
           />
         </div>
         
-        <QuizNavigation 
-          isFirstQuestion={isFirstQuestion}
-          isLastQuestion={isLastQuestion}
-          onPrevious={prevQuestion}
-          onNext={nextQuestion}
-          onSubmit={handleSubmit}
-          allQuestionsAnswered={allQuestionsAnswered}
-        />
+        <div>
+          <QuizNavigation 
+            isFirstQuestion={isFirstQuestion}
+            isLastQuestion={isLastQuestion}
+            onPrevious={prevQuestion}
+            onNext={nextQuestion}
+            onSubmit={handleSubmit}
+            allQuestionsAnswered={allQuestionsAnswered}
+          />
+        </div>
       </div>
     </div>
   );

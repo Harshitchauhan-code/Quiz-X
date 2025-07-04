@@ -41,6 +41,10 @@ export const QuizProvider = ({ children }) => {
     const savedAnswers = localStorage.getItem('quiz-x-userAnswers');
     return savedAnswers ? JSON.parse(savedAnswers) : [];
   });
+  const [visitedQuestions, setVisitedQuestions] = useState(() => {
+    const savedVisited = localStorage.getItem('quiz-x-visitedQuestions');
+    return savedVisited ? JSON.parse(savedVisited) : [];
+  });
   const [quizResults, setQuizResults] = useState(() => {
     const savedResults = localStorage.getItem('quiz-x-quizResults');
     return savedResults ? JSON.parse(savedResults) : {
@@ -73,6 +77,14 @@ export const QuizProvider = ({ children }) => {
   
   useEffect(() => {
     localStorage.setItem('quiz-x-currentQuizQuestion', currentQuizQuestion.toString());
+    
+    // Update visited questions when current question changes
+    setVisitedQuestions(prev => {
+      if (!prev.includes(currentQuizQuestion)) {
+        return [...prev, currentQuizQuestion];
+      }
+      return prev;
+    });
   }, [currentQuizQuestion]);
   
   useEffect(() => {
@@ -94,6 +106,10 @@ export const QuizProvider = ({ children }) => {
       localStorage.setItem('quiz-x-startTime', startTime.toString());
     }
   }, [startTime]);
+  
+  useEffect(() => {
+    localStorage.setItem('quiz-x-visitedQuestions', JSON.stringify(visitedQuestions));
+  }, [visitedQuestions]);
   
   // Toggle question status (Active/Inactive)
   const toggleQuestionStatus = (id) => {
@@ -133,7 +149,7 @@ export const QuizProvider = ({ children }) => {
     // Generate a new ID (simple implementation)
     const newId = `q${questions.length + 1}`;
     setQuestions(prevQuestions => [
-      { ...newQuestion, _id: newId, status: 'Active' },
+      { ...newQuestion, _id: newId },
       ...prevQuestions
     ]);
   };
@@ -159,6 +175,13 @@ export const QuizProvider = ({ children }) => {
       if (!startTime) {
         setStartTime(Date.now());
       }
+      
+      // Initialize visited questions with current question if not already saved
+      const savedVisited = localStorage.getItem('quiz-x-visitedQuestions');
+      if (!savedVisited || JSON.parse(savedVisited).length === 0) {
+        const currentQuestion = parseInt(localStorage.getItem('quiz-x-currentQuizQuestion') || '0');
+        setVisitedQuestions([currentQuestion]);
+      }
     } else {
       // Filter active questions
       const activeQuestions = questions.filter(q => q.status === 'Active');
@@ -170,6 +193,7 @@ export const QuizProvider = ({ children }) => {
       setQuizQuestions(selected);
       setCurrentQuizQuestion(0);
       setUserAnswers(Array(selected.length).fill(''));
+      setVisitedQuestions([0]); // Start with first question as visited
       setQuizResults({
         score: 0,
         correctAnswers: [],
@@ -252,6 +276,7 @@ export const QuizProvider = ({ children }) => {
     setQuizQuestions([]);
     setCurrentQuizQuestion(0);
     setUserAnswers([]);
+    setVisitedQuestions([]);
     setQuizResults({
       score: 0,
       correctAnswers: [],
@@ -269,6 +294,7 @@ export const QuizProvider = ({ children }) => {
     localStorage.removeItem('quiz-x-userAnswers');
     localStorage.removeItem('quiz-x-quizResults');
     localStorage.removeItem('quiz-x-startTime');
+    localStorage.removeItem('quiz-x-visitedQuestions');
   };
   
   // Value to be provided by the context
@@ -291,6 +317,7 @@ export const QuizProvider = ({ children }) => {
     // Quiz functionality
     quizQuestions,
     currentQuizQuestion,
+    setCurrentQuizQuestion,
     userAnswers,
     quizResults,
     showCorrectQuestions,
@@ -304,7 +331,8 @@ export const QuizProvider = ({ children }) => {
     toggleCorrectQuestions,
     toggleIncorrectQuestions,
     allQuestionsAnswered,
-    startTime
+    startTime,
+    visitedQuestions
   };
   
   return (

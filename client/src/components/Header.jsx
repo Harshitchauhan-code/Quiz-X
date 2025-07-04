@@ -1,13 +1,23 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useQuiz } from '../context/QuizContext';
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { resetQuiz } = useQuiz();
   
   // Hide Home link on home page and quiz page
   const shouldShowHomeLink = location.pathname !== '/' && location.pathname !== '/quiz';
+  const isQuizPage = location.pathname === '/quiz';
+  
+  // Handle exit quiz with confirmation
+  const handleExitQuiz = () => {
+    if (window.confirm('Are you sure you want to exit the quiz? Your progress will be lost.')) {
+      resetQuiz();
+      navigate('/');
+    }
+  };
   
   return (
     <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-md">
@@ -28,6 +38,15 @@ const Header = () => {
                 >
                   Home
                 </Link>
+              </li>
+            )}
+            {isQuizPage && (
+              <li>
+                <button 
+                  onClick={handleExitQuiz}
+className="text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition-colors duration-200 border-none cursor-pointer"                >
+                  Exit Quiz
+                </button>
               </li>
             )}
           </ul>

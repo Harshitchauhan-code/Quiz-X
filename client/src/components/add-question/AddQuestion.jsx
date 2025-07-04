@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuiz } from '../../context/QuizContext';
 import AddQuestionButton from './AddQuestionButton';
 import QuestionForm from '../question-form/QuestionForm';
+import StatusDropdown from './StatusDropdown';
 
 const AddQuestion = () => {
   const { addQuestion } = useQuiz();
@@ -10,6 +11,7 @@ const AddQuestion = () => {
     question: '',
     options: ['', '', '', ''],
     correctAnswer: '',
+    status: 'Active',
   });
   
   const handleQuestionChange = (e) => {
@@ -35,6 +37,13 @@ const AddQuestion = () => {
     });
   };
   
+  const handleStatusChange = (status) => {
+    setFormData({
+      ...formData,
+      status
+    });
+  };
+
   const handleSubmit = () => {
     // Add the question
     addQuestion({
@@ -47,6 +56,7 @@ const AddQuestion = () => {
       question: '',
       options: ['', '', '', ''],
       correctAnswer: '',
+      status: 'Active',
     });
     
     // Hide form
@@ -60,6 +70,7 @@ const AddQuestion = () => {
       question: '',
       options: ['', '', '', ''],
       correctAnswer: '',
+      status: 'Active',
     });
   };
   
@@ -70,6 +81,12 @@ const AddQuestion = () => {
       ) : (
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold text-gray-800 mb-4">Add New Question</h3>
+          <div className="mb-4">
+            <StatusDropdown 
+              selectedStatus={formData.status} 
+              onStatusChange={handleStatusChange} 
+            />
+          </div>
           <QuestionForm
             formData={formData}
             onQuestionChange={handleQuestionChange}

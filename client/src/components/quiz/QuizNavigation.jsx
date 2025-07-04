@@ -16,11 +16,17 @@ const QuizNavigation = ({ isFirstQuestion, isLastQuestion, onPrevious, onNext, o
       {isLastQuestion ? (
         <div>
           <button 
-            className={`px-4 py-2 rounded-md text-white font-medium transition-colors duration-150 ${allQuestionsAnswered ? 'bg-green-600 hover:bg-green-700' : 'bg-yellow-600 hover:bg-yellow-700'}`}
-            onClick={onSubmit}
-          >
-            Submit Quiz
-          </button>
+  className={`px-4 py-2 rounded-md text-white font-medium transition-colors duration-150 
+    ${allQuestionsAnswered 
+      ? 'bg-green-600 hover:bg-green-700' 
+      : 'bg-green-600 cursor-not-allowed'
+    }`}
+  onClick={onSubmit}
+  disabled={!allQuestionsAnswered}
+  title={allQuestionsAnswered ? 'Submit your quiz' : 'Please attempt all questions before submitting'}
+>
+  Submit Quiz
+</button>
         </div>
       ) : (
         <button 

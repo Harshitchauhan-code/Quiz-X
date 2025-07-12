@@ -1,12 +1,13 @@
-import { QuizProvider } from './context/QuizContext';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import { QuizProvider } from "./context/QuizContext";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 // These will be created next
-import Quiz from './pages/Quiz';
-import Result from './pages/Result';
+import Quiz from "./pages/Quiz";
+import Result from "./pages/Result";
+import StudentDetailsPage from "./pages/StudentDetailsPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <main className="flex-grow container mx-auto px-4 py-6">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/student-details" element={<StudentDetailsPage />} />
               <Route path="/quiz" element={<Quiz />} />
               <Route path="/result" element={<Result />} />
             </Routes>

@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 
-const interests = [
-  "Science",
-  "Mathematics",
-  "History",
-  "Literature",
-  "Sports",
-  "Technology",
-  "Art",
-  "Music",
-  "Other",
-];
+const interests = ["Science", "Mathematics", "History", "Technology"];
 
 const StudentDetailsForm = ({ onSubmit }) => {
   const [name, setName] = useState("");
@@ -40,7 +30,7 @@ const StudentDetailsForm = ({ onSubmit }) => {
         Enter Your Details
       </h2>
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Name:</label>
+        <label className="block text-gray-700 mb-2">Name</label>
         <input
           type="text"
           className="w-full border border-gray-300 rounded px-3 py-2"
@@ -53,7 +43,7 @@ const StudentDetailsForm = ({ onSubmit }) => {
         )}
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Age:</label>
+        <label className="block text-gray-700 mb-2">Age</label>
         <input
           type="number"
           min="1"

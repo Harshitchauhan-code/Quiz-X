@@ -92,7 +92,13 @@ const Quiz = () => {
   if (showFeedback) {
     return (
       <div className="max-w-3xl mx-auto">
-        <FeedbackForm onSubmit={handleFeedbackSubmit} />
+        <FeedbackForm
+          onSubmit={handleFeedbackSubmit}
+          onSkip={() => {
+            setShowFeedback(false);
+            navigate("/result");
+          }}
+        />
       </div>
     );
   }
@@ -103,6 +109,10 @@ const Quiz = () => {
 
   return (
     <div className="max-w-3xl mx-auto">
+      <div className="mb-4 text-sm text-gray-700 font-medium text-center">
+        <span className="text-red-500">*</span>Please attempt all questions to
+        submit the quiz.
+      </div>
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <QuizHeader
           currentQuizQuestion={currentQuizQuestion}
@@ -116,26 +126,17 @@ const Quiz = () => {
           visitedQuestions={visitedQuestions}
           onQuestionClick={handleQuestionClick}
         />
-
         <div className="p-6">
           <QuizQuestion
             question={currentQuestion.question}
             questionNumber={currentQuizQuestion + 1}
           />
-
           <QuizOptions
             options={currentQuestion.options}
             currentAnswer={userAnswers[currentQuizQuestion]}
             onSelectAnswer={selectAnswer}
           />
-
-          <div className="mt-4 p-3 text-sm">
-            <p className="flex items-center">
-              *Please attempt all questions to submit the quiz.
-            </p>
-          </div>
         </div>
-
         <div>
           <QuizNavigation
             isFirstQuestion={isFirstQuestion}

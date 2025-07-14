@@ -1,7 +1,13 @@
-import React from 'react';
-import { ToggleButton } from '@mui/material';
+import React from "react";
+import { ToggleButton } from "@mui/material";
 
-const OptionItem = ({ option, index, isCorrect, onChange, onSelectCorrect }) => {
+const OptionItem = ({
+  option,
+  index,
+  isCorrect,
+  onChange,
+  onSelectCorrect,
+}) => {
   return (
     <div className="flex items-center mb-2">
       <input
@@ -16,7 +22,9 @@ const OptionItem = ({ option, index, isCorrect, onChange, onSelectCorrect }) => 
         value="check"
         selected={isCorrect}
         onChange={onSelectCorrect}
-        className={`w-10 h-10 !min-w-0 !rounded-md ${isCorrect ? '!bg-green-500 !text-white' : ''}`}
+        className={`w-10 h-10 !min-w-0 !rounded-md ${
+          isCorrect ? "!bg-green-500 !text-white" : ""
+        }`}
         disabled={!option.trim()}
       >
         ✓

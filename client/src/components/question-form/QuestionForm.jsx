@@ -1,35 +1,35 @@
-import React from 'react';
-import OptionItem from './OptionItem';
-import FormActions from './FormActions';
+import React from "react";
+import OptionItem from "./OptionItem";
+import FormActions from "./FormActions";
 
-const QuestionForm = ({ 
-  formData, 
-  onQuestionChange, 
-  onOptionChange, 
-  onCorrectAnswerSelect, 
-  onSubmit, 
+const QuestionForm = ({
+  formData,
+  onQuestionChange,
+  onOptionChange,
+  onCorrectAnswerSelect,
+  onSubmit,
   onCancel,
-  submitButtonText = 'Save Question'
+  submitButtonText = "Save Question",
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Validate form
     if (!formData.question.trim()) {
-      alert('Please enter a question');
+      alert("Please enter a question");
       return;
     }
-    
-    if (formData.options.some(option => !option.trim())) {
-      alert('Please fill in all options');
+
+    if (formData.options.some((option) => !option.trim())) {
+      alert("Please fill in all options");
       return;
     }
-    
+
     if (!formData.correctAnswer) {
-      alert('Please select a correct answer');
+      alert("Please select a correct answer");
       return;
     }
-    
+
     // Submit the form
     onSubmit(formData);
   };
@@ -37,7 +37,10 @@ const QuestionForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2" htmlFor="question">
+        <label
+          className="block text-gray-700 font-medium mb-2"
+          htmlFor="question"
+        >
           Question
         </label>
         <input
@@ -51,13 +54,15 @@ const QuestionForm = ({
           required
         />
       </div>
-      
+
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2">
           <label className="block text-gray-700 font-medium">Options</label>
-          <span className="text-sm text-gray-600 font-medium">Select Correct Answer</span>
+          <span className="text-sm text-gray-600 font-medium">
+            Select Correct Answer
+          </span>
         </div>
-        
+
         {formData.options.map((option, index) => (
           <OptionItem
             key={index}
@@ -69,11 +74,8 @@ const QuestionForm = ({
           />
         ))}
       </div>
-      
-      <FormActions 
-        onCancel={onCancel} 
-        submitButtonText={submitButtonText} 
-      />
+
+      <FormActions onCancel={onCancel} submitButtonText={submitButtonText} />
     </form>
   );
 };

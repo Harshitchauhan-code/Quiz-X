@@ -18,14 +18,6 @@ const Home = () => {
     <div className="max-w-6xl mx-auto">
       <HomeActions />
       <QuestionManager />
-      <div className="flex justify-center mt-8">
-        <button
-          onClick={handleStartQuiz}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition"
-        >
-          Start Quiz
-        </button>
-      </div>
     </div>
   );
 };

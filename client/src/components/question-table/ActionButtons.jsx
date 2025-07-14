@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const ActionButtons = ({ onEdit, onDelete, isDeleted = false }) => {
   return (
@@ -12,9 +12,13 @@ const ActionButtons = ({ onEdit, onDelete, isDeleted = false }) => {
       <div className="h-4 border-r border-gray-300 mx-1"></div>
       <button
         onClick={onDelete}
-        className={`${isDeleted ? 'text-green-600 hover:text-green-900' : 'text-red-600 hover:text-red-900'} transition-colors duration-150`}
+        className={`${
+          isDeleted
+            ? "text-green-600 hover:text-green-900"
+            : "text-red-600 hover:text-red-900"
+        } transition-colors duration-150`}
       >
-        {isDeleted ? 'Restore' : 'Delete'}
+        {isDeleted ? "Restore" : "Delete"}
       </button>
     </div>
   );

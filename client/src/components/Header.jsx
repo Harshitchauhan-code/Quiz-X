@@ -29,9 +29,6 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
         <div className="text-center md:text-left mb-4 md:mb-0">
           <h1 className="text-3xl font-bold">Quiz-X</h1>
-          <p className="text-blue-100 mt-1">
-            Manage your quiz questions efficiently
-          </p>
         </div>
 
         <nav className="w-full md:w-auto">

@@ -1,6 +1,6 @@
-import React from 'react';
-import HomeHeader from './HomeHeader';
-import StartQuizButton from './StartQuizButton';
+import React from "react";
+import HomeHeader from "./HomeHeader";
+import StartQuizButton from "./StartQuizButton";
 
 const HomeActions = () => {
   return (

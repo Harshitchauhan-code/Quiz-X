@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const FeedbackForm = ({ onSubmit }) => {
+const FeedbackForm = ({ onSubmit, onSkip }) => {
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(5);
   const [submitted, setSubmitted] = useState(false);
@@ -39,36 +39,42 @@ const FeedbackForm = ({ onSubmit }) => {
         <select
           className="w-full border border-gray-300 rounded px-3 py-2"
           value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
+          onChange={(e) => setRating(e.target.value)}
         >
-          {[5, 4, 3, 2, 1].map((val) => (
-            <option key={val} value={val}>
-              {val} -{" "}
-              {
-                ["Excellent", "Good", "Average", "Below Average", "Poor"][
-                  5 - val
-                ]
-              }
-            </option>
-          ))}
+          {["Excellent", "Good", "Average", "Below Average", "Poor"].map(
+            (label) => (
+              <option key={label} value={label}>
+                {label}
+              </option>
+            )
+          )}
         </select>
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Additional comments:</label>
+        <label className="block text-gray-700 mb-2">Comment / Suggestion</label>
         <textarea
           className="w-full border border-gray-300 rounded px-3 py-2"
           rows={4}
           value={feedback}
           onChange={(e) => setFeedback(e.target.value)}
-          placeholder="Let us know what you liked or what can be improved..."
+          placeholder="Comment / Suggestion"
         />
       </div>
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
-      >
-        Submit Feedback
-      </button>
+      <div className="flex gap-4">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+        >
+          Submit Feedback
+        </button>
+        <button
+          type="button"
+          className="bg-gray-400 text-white px-6 py-2 rounded hover:bg-gray-500 transition"
+          onClick={onSkip}
+        >
+          Skip
+        </button>
+      </div>
     </form>
   );
 };
